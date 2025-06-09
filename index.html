@@ -186,23 +186,40 @@
         dots = dynamicDots;     // NodeList of new dots
         currentSlide = 0;       // Reset current slide index
 
+        const controls = document.querySelector('.slider-controls');
+
         if (slides.length === 0) {
             console.warn("No slides to initialize for the slider.");
-            // Optionally hide slider controls if no slides
-            if(document.querySelector('.slider-controls')) {
-                 document.querySelector('.slider-controls').style.display = 'none';
+            if (controls) {
+                controls.style.display = 'none';
             }
-            return;
+            return; // No slides, so no slider to set up
         }
-        
-        // Ensure first slide and dot are active if not already
-        if (slides.length > 0 && !slides[0].classList.contains('active')) {
+
+        // Always ensure the first (or only) slide is active
+        if (!slides[0].classList.contains('active')) {
             slides[0].classList.add('active');
         }
+        // If dots are generated, ensure the first one is active
         if (dots.length > 0 && !dots[0].classList.contains('active')) {
             dots[0].classList.add('active');
         }
 
+        setHeroBackground(); // Set background for the initial slide
+
+        if (slides.length <= 1) {
+            if (controls) {
+                controls.style.display = 'none';
+            }
+            clearInterval(slideTimer); // Clear any existing timer just in case
+            // No event listeners or interval needed for a single slide
+            return;
+        }
+
+        // More than one slide, so ensure controls are visible and proceed
+        if (controls) {
+            controls.style.display = ''; // Or 'flex' if that's the default display style
+        }
 
         function showSlide(n) {
             slides.forEach((slide, index) => {
@@ -214,10 +231,11 @@
             slides[currentSlide].classList.add('active');
             if (dots[currentSlide]) dots[currentSlide].classList.add('active');
             
-            // Reset the timer
+            setHeroBackground(); // Call background update
+
+            // Reset the timer only if there's more than one slide
             clearInterval(slideTimer);
             slideTimer = setInterval(nextSlide, slideInterval);
-            setHeroBackground(); // Call background update
         }
 
         function nextSlide() {
@@ -239,14 +257,13 @@
 
         dots.forEach((dot, index) => {
             // Remove old listeners if any
-            dot.removeEventListener('click', () => showSlide(index)); 
-            dot.addEventListener('click', () => {
-                showSlide(index);
-            });
+            const newListener = () => showSlide(index);
+            dot.removeEventListener('click', dot.listener); // Assumes listener was stored on dot
+            dot.addEventListener('click', newListener);
+            dot.listener = newListener; // Store listener for removal
         });
         
-        // Initial background set and start timer
-        setHeroBackground();
+        // Initial timer start for multiple slides
         clearInterval(slideTimer); // Clear any existing timer
         slideTimer = setInterval(nextSlide, slideInterval);
     }

@@ -786,3 +786,34 @@ textarea {
         font-size: 3rem;
     }
 }
+
+/* Styles for new hero slide buttons */
+.hero-slide-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hero-slide-buttons .btn {
+  /* btn-secondary styles will apply. Add specific overrides if needed */
+  /* Example: min-width: 120px; */
+  margin-bottom: 5px; /* Small margin for wrapped buttons */
+}
+
+@media (max-width: 768px) {
+  .hero-slide-buttons {
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Center them when stacked */
+  }
+  .hero-slide-buttons .btn {
+    width: 80%; /* Make buttons take more width */
+    margin-bottom: 10px; /* Add margin for stacked buttons */
+    text-align: center;
+  }
+  .hero-slide-buttons .btn:last-child {
+    margin-bottom: 0;
+  }
+}
