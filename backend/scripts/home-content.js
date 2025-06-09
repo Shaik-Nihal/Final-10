@@ -94,6 +94,32 @@ document.addEventListener('DOMContentLoaded', () => {
             slideContentDiv.appendChild(p);
             slideContentDiv.appendChild(a);
 
+            // Create and append new buttons
+            const heroSlideButtonsDiv = document.createElement('div');
+            heroSlideButtonsDiv.classList.add('hero-slide-buttons');
+
+            for (let i = 1; i <= 3; i++) {
+                const btnTextKey = `button${i}_text`;
+                const btnUrlKey = `button${i}_url`;
+
+                const buttonText = data[btnTextKey];
+                const buttonUrl = data[btnUrlKey];
+
+                if (buttonText && buttonText.trim() !== '' && buttonUrl && buttonUrl.trim() !== '') {
+                    const button = document.createElement('a');
+                    button.href = buttonUrl;
+                    button.textContent = buttonText;
+                    button.classList.add('btn', 'btn-secondary', `hero-action-btn-${i}`);
+                    // Optionally, add target="_blank" if these are external links
+                    // button.target = '_blank';
+                    heroSlideButtonsDiv.appendChild(button);
+                }
+            }
+
+            if (heroSlideButtonsDiv.hasChildNodes()) {
+                slideContentDiv.appendChild(heroSlideButtonsDiv);
+            }
+
             slideDiv.appendChild(img);
             slideDiv.appendChild(slideContentDiv);
             sliderContainer.appendChild(slideDiv);
@@ -171,6 +197,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     paragraph: data.paragraph || '',
                     buttonUrl: data.buttonUrl || '#',
                     buttonText: data.buttonText || 'Learn More',
+                    button1_text: data.button1_text || '',
+                    button1_url: data.button1_url || '',
+                    button2_text: data.button2_text || '',
+                    button2_url: data.button2_url || '',
+                    button3_text: data.button3_text || '',
+                    button3_url: data.button3_url || '',
                     // Include order if you need it for any client-side logic, though orderBy handles it for display
                     order: data.order
                 });
